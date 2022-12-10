@@ -54,19 +54,13 @@ module.exports = params => {
     await page.getByRole('textbox', { name: 'Code editor' }).press('Control+a')
     await page.getByRole('textbox', { name: 'Code editor' }).fill(`console.log`)
     await page.getByRole('button', { name: 'Export menu dropdown' }).click()
-    await page.getByPlaceholder('carbon').click()
-    await page.getByPlaceholder('carbon').fill(code)
-
-    const [download] = await Promise.all([
-      page.waitForEvent('download'),
-      page.getByRole('button', { name: img === 'PNG' ? 'PNG' : 'SVG' }).click(),
-    ])
-
+    await page.getByText('Open').click()
+    await page.waitForTimeout(1000)
     await browser.close()
 
     resolve({
       status: 200,
-      blob: download.url(),
+      blob: page.url(),
     })
   })
 }
