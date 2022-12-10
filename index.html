@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carbon API</title>
+  </head>
+  <body>
+    <h2>请求端口: /api</h2>
+    <h2>请求方式：POST</h2>
+    <h2>请求参数：code, theme, img</h2>
+    <h3>theme 可选值</h3>
+    <ui>
+      <li>3024 Night</li>
+      <li>A11y Dark</li>
+      <li>Blackboard</li>
+      <li>Base 16 (Dark)</li>
+      <li>Cobalt</li>
+      <li>Dracula ProPurchase</li>
+      <li>Duotone</li>
+      <li>Hopscotch</li>
+      <li>Lucario</li>
+      <li>Material</li>
+      <li>Monokai</li>
+      <li>Night Owl</li>
+      <li>Nord</li>
+      <li>Oceanic Next</li>
+      <li>One Light</li>
+      <li>One Dark</li>
+      <li>Panda</li>
+      <li>Paraiso</li>
+      <li>Seti</li>
+      <li>Shades of Purple</li>
+      <li>Solarized (Dark)</li>
+      <li>Solarized (Light)</li>
+      <li>SynthWave '84</li>
+      <li>Twilight</li>
+      <li>Verminal</li>
+      <li>VSCode</li>
+      <li>Yeti</li>
+      <li>Zenburn</li>
+    </ui>
+    <h3>img 可选值</h3>
+    <ul>
+      <li>PNG</li>
+      <li>SVG</li>
+    </ul>
+    <hr />
+    <h2>返回值</h2>
+    <h3>成功：{"status": 200, "blob": "blob:https://carbon.now.sh/xxx"}</h3>
+    <h3>请求参数错误：{"status": 400, "msg": "Bad Request"}</h3>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-import { chromium } from 'playwright'
+import * as playwright from 'playwright-aws-lambda'
 
 type Params = {
   code: string
@@ -42,15 +42,14 @@ export default (params: Params) => {
   return new Promise(async (resolve, reject) => {
     const { code, theme, img } = params
     if (!themes.includes(theme) || !imgs.includes(img)) {
-      console.log('theme:', theme)
-      console.log('img:', img)
       resolve({
         status: 400,
         msg: 'Bad Request',
       })
     }
-    const browser = await chromium.launch()
-    const page = await browser.newPage()
+    const browser = await playwright.launchChromium({ headless: true })
+    const context = await browser.newContext()
+    const page = await context.newPage()
 
     await page.goto('https://carbon.now.sh/')
     await page
