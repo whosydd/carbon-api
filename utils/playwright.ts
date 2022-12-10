@@ -1,9 +1,8 @@
-import { chromium } from 'playwright'
+import * as playwright from 'playwright-aws-lambda'
 
 type Params = {
   code: string
   theme: string
-  img: string
 }
 
 const themes = [
@@ -36,21 +35,19 @@ const themes = [
   'Yeti',
   'Zenburn',
 ]
-const imgs = ['PNG', 'SVG']
 
 export default (params: Params) => {
   return new Promise(async (resolve, reject) => {
-    const { code, theme, img } = params
-    if (!themes.includes(theme) || !imgs.includes(img)) {
-      console.log('theme:', theme)
-      console.log('img:', img)
+    const { code, theme } = params
+    if (!themes.includes(theme)) {
       resolve({
         status: 400,
         msg: 'Bad Request',
       })
     }
-    const browser = await chromium.launch()
-    const page = await browser.newPage()
+    const browser = await playwright.launchChromium({ headless: true })
+    const context = await browser.newContext()
+    const page = await context.newPage()
 
     await page.goto('https://carbon.now.sh/')
     await page
@@ -59,21 +56,18 @@ export default (params: Params) => {
       .click()
     await page.getByText(theme).click()
     await page.getByRole('textbox', { name: 'Code editor' }).press('Control+a')
-    await page.getByRole('textbox', { name: 'Code editor' }).fill(`console.log`)
+    await page.getByRole('textbox', { name: 'Code editor' }).fill(code)
     await page.getByRole('button', { name: 'Export menu dropdown' }).click()
-    await page.getByPlaceholder('carbon').click()
-    await page.getByPlaceholder('carbon').fill(code)
 
-    const [download] = await Promise.all([
-      page.waitForEvent('download'),
-      page.getByRole('button', { name: img === 'PNG' ? 'PNG' : 'SVG' }).click(),
-    ])
+    await page.getByRole('button', { name: 'Open' }).filter({ hasText: 'Open' }).click()
+    await page.waitForURL(/blob:https:\/\/carbon.now.sh\.*/)
 
+    // await page.waitForTimeout(1000)
     await browser.close()
 
     resolve({
       status: 200,
-      blob: download.url(),
+      blob: page.url(),
     })
   })
 }
