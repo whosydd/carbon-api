@@ -30,11 +30,10 @@ const themes = [
   'Yeti',
   'Zenburn',
 ]
-const imgs = ['PNG', 'SVG']
 
 module.exports = params => {
   return new Promise(async (resolve, reject) => {
-    const { code, theme, img } = params
+    const { code, theme } = params
     if (!themes.includes(theme) || !imgs.includes(img)) {
       resolve({
         status: 400,
@@ -52,7 +51,7 @@ module.exports = params => {
       .click()
     await page.getByText(theme).click()
     await page.getByRole('textbox', { name: 'Code editor' }).press('Control+a')
-    await page.getByRole('textbox', { name: 'Code editor' }).fill(`console.log`)
+    await page.getByRole('textbox', { name: 'Code editor' }).fill(code)
     await page.getByRole('button', { name: 'Export menu dropdown' }).click()
     await page.getByText('Open').click()
     await page.waitForTimeout(1000)
