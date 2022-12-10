@@ -34,7 +34,7 @@ const themes = [
 module.exports = params => {
   return new Promise(async (resolve, reject) => {
     const { code, theme } = params
-    if (!themes.includes(theme) || !imgs.includes(img)) {
+    if (!themes.includes(theme)) {
       resolve({
         status: 400,
         msg: 'Bad Request',
@@ -45,6 +45,7 @@ module.exports = params => {
     const page = await context.newPage()
 
     await page.goto('https://carbon.now.sh/')
+    await page.waitForTimeout(100)
     await page
       .getByRole('combobox', { name: 'Theme' })
       .getByRole('button', { name: 'open menu' })
@@ -53,8 +54,8 @@ module.exports = params => {
     await page.getByRole('textbox', { name: 'Code editor' }).press('Control+a')
     await page.getByRole('textbox', { name: 'Code editor' }).fill(code)
     await page.getByRole('button', { name: 'Export menu dropdown' }).click()
-    await page.getByText('Open').click()
-    await page.waitForTimeout(1000)
+    await page.getByRole('button', { name: 'Open' }).filter({ hasText: 'Open' }).click()
+    await page.waitForURL(/blob:https:\/\/carbon.now.sh\.*/)
     await browser.close()
 
     resolve({
