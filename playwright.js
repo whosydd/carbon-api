@@ -35,17 +35,13 @@ module.exports = params => {
   return new Promise(async (resolve, reject) => {
     const { code, theme } = params
     if (!themes.includes(theme)) {
-      resolve({
-        status: 400,
-        msg: 'Bad Request',
-      })
+      resolve('Bad Request')
     }
     const browser = await playwright.launchChromium({ headless: true })
     const context = await browser.newContext()
     const page = await context.newPage()
 
     await page.goto('https://carbon.now.sh/')
-    await page.waitForTimeout(100)
     await page
       .getByRole('combobox', { name: 'Theme' })
       .getByRole('button', { name: 'open menu' })
@@ -56,11 +52,10 @@ module.exports = params => {
     await page.getByRole('button', { name: 'Export menu dropdown' }).click()
     await page.getByRole('button', { name: 'Open' }).filter({ hasText: 'Open' }).click()
     await page.waitForURL(/blob:https:\/\/carbon.now.sh\.*/)
+    await page.getByRole('img').click()
+    const data = await page.getByRole('img').screenshot({ type: 'png' })
     await browser.close()
 
-    resolve({
-      status: 200,
-      blob: page.url(),
-    })
+    resolve(data)
   })
 }
