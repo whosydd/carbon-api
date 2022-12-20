@@ -1,0 +1,7 @@
+# flyctl launch added from .gitignore
+**\node_modules
+**\dist
+**\.vercel
+
+**\.env
+fly.toml

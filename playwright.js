@@ -37,23 +37,35 @@ module.exports = params => {
     if (!themes.includes(theme)) {
       resolve('Bad Request')
     }
-    const browser = await playwright.launchChromium({ headless: true })
+    const browser = await playwright.launchChromium({
+      headless: true,
+      executablePath: '/usr/bin/chromium-browser',
+      args: ['--disable-dev-shm-usage', '--disable-setuid-sandbox', '--no-sandbox'],
+      chromiumSandbox: false,
+    })
     const context = await browser.newContext()
     const page = await context.newPage()
 
     await page.goto('https://carbon.now.sh/')
-    await page
-      .getByRole('combobox', { name: 'Theme' })
-      .getByRole('button', { name: 'open menu' })
-      .click()
-    await page.getByText(theme).click()
+    // await page
+    //   .getByRole('combobox', { name: 'Theme' })
+    //   .getByRole('button', { name: 'open menu' })
+    //   .click()
+    // await page.getByText(theme).click()
     await page.getByRole('textbox', { name: 'Code editor' }).press('Control+a')
     await page.getByRole('textbox', { name: 'Code editor' }).fill(code)
-    await page.getByRole('button', { name: 'Export menu dropdown' }).click()
-    await page.getByRole('button', { name: 'Open' }).filter({ hasText: 'Open' }).click()
-    await page.waitForURL(/blob:https:\/\/carbon.now.sh\.*/)
-    await page.getByRole('img').click()
-    const data = await page.getByRole('img').screenshot({ type: 'png' })
+
+    const data = await page.screenshot({ type: 'png' })
+    // await page.getByRole('button', { name: 'Export menu dropdown' }).click()
+    // await page.getByRole('button', { name: 'Open' }).filter({ hasText: 'Open' }).click()
+    // await page.waitForURL(/blob:https:\/\/carbon.now.sh\.*/)
+    // await page.getByRole('img').click()
+    // const data = await page.getByRole('img').screenshot({ type: 'png' })
+
+    // const data = await page
+    //   .getByRole('textbox', { name: 'Code editor' })
+    //   .screenshot({ type: 'png' })
+
     await browser.close()
 
     resolve(data)

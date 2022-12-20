@@ -15,7 +15,6 @@
     "playwright-core": "^1.28.1"
   },
   "devDependencies": {
-    "dotenv": "^16.0.3",
     "prettier": "^2.8.1"
   }
 }
