@@ -37,7 +37,10 @@ module.exports = params => {
     if (!themes.includes(theme)) {
       resolve('Bad Request')
     }
-    const browser = await playwright.launchChromium({ headless: true })
+    const browser = await playwright.launchChromium({
+      headless: true,
+      executablePath: '/usr/bin/chromium-browser',
+    })
     const context = await browser.newContext()
     const page = await context.newPage()
 
