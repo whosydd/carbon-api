@@ -1,11 +1,15 @@
 {
   "name": "carbon-api",
   "version": "0.1.0",
-  "description": "",
+  "description": "api for carbon.now.sh",
   "main": "index.js",
   "scripts": {},
   "keywords": [],
   "author": "GY <dev.youngkwok718@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whosydd/carbon-api.git"
+  },
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^18.11.12",
