@@ -38,15 +38,12 @@ const themes = [
 
 export default (params: Params) => {
   return new Promise(async (resolve, reject) => {
-    const { code, theme } = params
+    let { code, theme } = params
     if (!themes.includes(theme)) {
-      resolve({
-        status: 400,
-        msg: 'Bad Request',
-      })
+      theme = 'Dracula ProPurchase'
     }
     const browser = await playwright.launchChromium({ headless: true })
-    const context = await browser.newContext()
+    const context = await browser.newContext({ screen: { width: 4096, height: 4096 } })
     const page = await context.newPage()
 
     await page.goto('https://carbon.now.sh/')
@@ -61,13 +58,10 @@ export default (params: Params) => {
 
     await page.getByRole('button', { name: 'Open' }).filter({ hasText: 'Open' }).click()
     await page.waitForURL(/blob:https:\/\/carbon.now.sh\.*/)
+    const data = await page.getByRole('img').screenshot({ type: 'png' })
 
-    // await page.waitForTimeout(1000)
     await browser.close()
 
-    resolve({
-      status: 200,
-      blob: page.url(),
-    })
+    resolve(data)
   })
 }
