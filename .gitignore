@@ -1,2 +1,5 @@
 .vercel
+vercel.json
+
 node_modules/
+out/
